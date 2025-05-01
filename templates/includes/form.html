@@ -1,0 +1,49 @@
+{% for field in form.visible_fields %}
+  <div class="mb-3">
+    {% for error in field.errors %}
+      <div class="alert alert-danger">
+        {{ error|escape }}
+      </div>
+    {% endfor %}
+    {% if field.widget_type in "language,technology" %}
+      <div class="d-flex flex-column">
+        {{ field.label_tag }}
+        {{ field }}
+      </div>
+    {% elif field.widget_type == "ckeditor" %}
+      <div>
+        {{ field.label_tag }}
+        {{ field }}
+      </div>
+    {% elif field.widget_type == "clearablefile" %}
+        {{ field.label_tag }}
+        <input name="{{ field.html_name }}"
+               id="{{ field.id_for_label }}"
+               class="form-control"
+               type="{{ field.field.widget.input_type }}"
+                {% if field.field.required %}
+                  required
+                {% endif %}/>
+    {% else %}
+      <div class="form-floating">
+      {% if field.widget_type == "checkbox" %}
+        <div class="form-check">
+          {{ field }}
+          <label class="form-check-label" for="flexCheckDefault">
+            {{ field.label }}
+          </label>
+        </div>
+      {% else %}
+        {{ field }}
+        {{ field.label_tag }}
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+{% endfor %}
+{% for error in form.non_field_errors %}
+  <div class="alert alert-danger">
+    {{ error|escape }}
+  </div>
+{% endfor %}
+<button type="submit" class="btn btn-primary px-4">Save</button>

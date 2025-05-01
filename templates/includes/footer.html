@@ -1,0 +1,11 @@
+<div class="bg-dark">
+  <footer class="footer w-100 mx-auto d-flex flex-wrap justify-content-between align-items-center py-3">
+    <div class="col-md-6 col-lg-5 align-items-baseline d-flex flex-wrap">
+      <a href="{% url 'home:landing' %}"
+         class="header__logo text-decoration-none me-2">
+        <span class="text-muted h4 fw-bold m-0">FLEXWIRE</span>
+      </a>
+      <span>© <span id="date">{% now "Y" %}</span> flex wire, Inc</span>
+    </div>
+  </footer>
+</div>

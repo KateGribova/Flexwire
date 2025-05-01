@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% if team.creator_id == request.user.id %}
+    <div class="col-lg-6 mx-auto">
+      <div class="card d-flex border-0 my-5 p-3 rounded shadow-sm" id="tabs"
+           role="tablist">
+        <ul class="list-unstyled d-flex gap-2 mb-0">
+          {% with request.resolver_match.view_name as view_name %}
+            <li>
+              <a class="tab_link border-0 {% if view_name == 'teams:team_detail' %}active{% endif %}" href="{% url 'teams:team_detail' team.id %}">
+                Public view
+              </a>
+            </li>
+            <li>
+              <a class="tab_link border-0 {% if view_name == 'teams:edit_team' %}active{% endif %}" href="{% url 'teams:edit_team' team.id %}">
+                Edit
+              </a>
+            </li>
+            <li>
+              <a class="tab_link border-0 {% if view_name == 'teams:pendings_team' %}active{% endif %}" href="{% url 'teams:pendings_team' team.id %}">
+                Pendings <span class="badge rounded-circle text-bg-danger">{{ pendings.all.count }}</span>
+              </a>
+            </li>
+          {% endwith %}
+        </ul>
+      </div>
+    </div>
+  {% endif %}
+  {% block inner %}
+  {% endblock inner %}
+{% endblock content %}

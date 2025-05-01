@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Logout
+{% endblock title %}
+
+{% load static %}
+
+{% block content %}
+  <div class="text-center">
+    <a href="{% url 'home:landing' %}" class="header__logo text-decoration-none">
+      <span>FLEXWIRE</span>
+    </a>
+  </div>
+  <h1 class="text-center" >Successful exit, come back soon!</h1>
+{% endblock content %}

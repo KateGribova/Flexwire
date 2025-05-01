@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+  Create new role
+{% endblock title %}
+
+{% block head %}
+  {{ form.media.css }}
+{% endblock head %}
+
+{% block content %}
+  <form action="" method="post" class="m-auto col-auto card p-3">
+    {% csrf_token %}
+    <div class="d-flex flex-column gap-3 justify-content-center">
+      <h3>Adding new roles to your team</h3>
+      <div class="col-lg-6 mx-auto">
+        {{ form.role_default }}
+      </div>
+      <button type="submit" class="btn btn-primary col-lg-2 mx-auto">Save</button>
+    </div>
+  </form>
+{% endblock content %}
+
+{% block scripts %}
+  <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
+  {{ form.media.js }}
+{% endblock scripts %}
