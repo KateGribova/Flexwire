@@ -1,12 +1,9 @@
 # FLEXWIRE
 
-- Ссылка на Github Gist с парсером для фикстур:
-[Генерация фикстур](https://gist.github.com/Arseniks/09cd42e1bb671be9f7402d01162b36da)
-
 ## Запуск проекта
 - Клонируйте проект с GitHub с помощью команды:
 ```
-git clone https://github.com/Arseniks/flexwire
+git clone https://github.com/KateGribova/Flexwire
 ```
 - Перейдите в папку с проектом:
 ```
