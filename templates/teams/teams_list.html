@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% load thumbnail %}
+{% load static %}
+
+{% block title %}
+  Team search
+{% endblock title %}
+
+{% block head %}
+  {{ form.media.css }}
+{% endblock head %}
+
+{% block content %}
+  <div class="d-flex justify-content-center flex-column my-auto">
+    <h1 class="text-center">Team search</h1>
+    <form class="container" method="post">
+      {% csrf_token %}
+      <div class="row d-flex flex-lg-row flex-column-reverse">
+        <div class="col-lg-9 col-12">
+          <div class="d-flex">
+            <div class="position-relative w-100">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+              </svg>
+              <input type="text" class="form-control ps-5 search" name="value" value="{{ value }}"/>
+            </div>
+            <button type="submit" class="btn search__button">Search</button>
+          </div>
+          <div class="row row-cols-md-2 row-cols-lg-3 row-cols-1 my-5 d-flex w-100 gy-4 justify-content-center">
+            {% for team in teams %}
+              <div class="col">
+                <a class="card team d-flex border-0 flex-column text-decoration-none h-100" href="{% url 'teams:team_detail' team.id %}">
+                  {% thumbnail team.image "256x256" crop="center" as img %}
+                    <img src="{{ img.url }}"
+                        width="100%"
+                        height="auto"
+                        class="card-img-top team__image"
+                        alt="team image"/>
+                  {% empty %}
+                    <div class="text-bg-secondary card-img-top h-100 d-flex align-items-center justify-content-center">
+                      <p class="text-center text-light">No Image</p>
+                    </div>
+                  {% endthumbnail %}
+                  <div class="card-body d-flex flex-column gap-2">
+                    <div>
+                      <h4 class="card-title fw-bold text-dark">{{ team.title }}</h4>
+                      <p class="card-text text-muted">{{ team.description|striptags|safe|truncatewords:10 }}</p>
+                    </div>
+                    <div class="d-flex flex-column gap-2 mt-auto">
+                      <div class="d-flex gap-2">
+                        <span class="tech bg-light">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stack" viewBox="0 0 16 16">
+                            <path d="m14.12 10.163 1.715.858c.22.11.22.424 0 .534L8.267 15.34a.598.598 0 0 1-.534 0L.165 11.555a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.66zM7.733.063a.598.598 0 0 1 .534 0l7.568 3.784a.3.3 0 0 1 0 .535L8.267 8.165a.598.598 0 0 1-.534 0L.165 4.382a.299.299 0 0 1 0-.535L7.733.063z"/>
+                            <path d="m14.12 6.576 1.715.858c.22.11.22.424 0 .534l-7.568 3.784a.598.598 0 0 1-.534 0L.165 7.968a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.659z"/>
+                          </svg>
+                        </span>
+                        <ul class="list-unstyled d-flex flex-wrap gap-2 mb-0">
+                        {% for tech in team.technologies.all %}
+                          <li class="badge tech">{{ tech.technology }}</li>
+                        {% endfor %}
+                        </ul>
+                      </div>
+                      <div class="d-flex gap-2">
+                        <span class="lang bg-light"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-translate" viewBox="0 0 16 16">
+                            <path d="M4.545 6.714 4.11 8H3l1.862-5h1.284L8 8H6.833l-.435-1.286H4.545zm1.634-.736L5.5 3.956h-.049l-.679 2.022H6.18z"/>
+                            <path d="M0 2a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-3H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2zm7.138 9.995c.193.301.402.583.63.846-.748.575-1.673 1.001-2.768 1.292.178.217.451.635.555.867 1.125-.359 2.08-.844 2.886-1.494.777.665 1.739 1.165 2.93 1.472.133-.254.414-.673.629-.89-1.125-.253-2.057-.694-2.82-1.284.681-.747 1.222-1.651 1.621-2.757H14V8h-3v1.047h.765c-.318.844-.74 1.546-1.272 2.13a6.066 6.066 0 0 1-.415-.492 1.988 1.988 0 0 1-.94.31z"/>
+                          </svg>
+                        </span>
+                        <span class="badge lang">{{ team.language.language }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            {% empty %}
+              <h4>No one has created team yet...</h4>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="col-lg-3 col-12 mb-3">
+          <div class="card p-3 display-lg-block d-flex justify-content-center">
+            <h2>Filters</h2>
+            <div class="my-3 d-lg-block d-flex justify-content-center flex-column">
+              <h4>Technologies</h4>
+              {{ form.technologies }}
+            </div>
+            <div class="mb-3 d-lg-block d-flex justify-content-center flex-column">
+              <h4>Languages</h4>
+              {{ form.language }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page=1"><<</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+    {% endif %}
+    {% for page_number in page_obj.paginator.page_range %}
+      <li class="page-item {% if page_number == page_obj.number %} active {% endif %}"><a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a></li>
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">>></a></li>
+    {% endif %}
+  </ul>
+{% endblock content %}
+
+{% block scripts %}
+  <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
+  {{ form.media.js }}
+{% endblock scripts %}

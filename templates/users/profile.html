@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}
+  {{ user.nickname }}
+{% endblock title %}
+
+{% block content %}
+  <div class="container d-flex flex-column gap-4 my-auto mt-5">
+    <div class="row mb-5">
+      <div class="col-lg-12 p-0">
+        <div class="card p-3 d-flex flex-row border-0">
+          <div class="col-auto">
+            {% thumbnail user.image "128x128" crop="center" as img %}
+              <img src="{{ img.url }}"
+                   width="128px"
+                   height="128px"
+                   class="rounded-circle"
+                   alt="user image"/>
+            {% empty %}
+              <span class="text-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                </svg>
+              </span>
+            {% endthumbnail %}
+          </div>
+          <div class="col d-flex flex-column ps-4 {% if user.city %}justify-content-end{% else %}justify-content-center{% endif %}">
+            <div class="row d-flex flex-row">
+              <div class="col d-flex align-items-center">
+                <h1>{{ user.nickname }}</h1>
+                {% if request.user == user %}
+                  <a href="{% url 'users:account' %}" class="btn btn-primary ms-auto px-3">Edit</a>
+                {% endif %}
+              </div>
+            </div>
+            {% if user.city %}
+              <div class="row">
+                <p class="text-read py-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                    <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                    <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                  </svg>
+                  {{ user.city }}</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 d-flex flex-lg-row flex-column p-0 justify-content-between">
+        <div class="col-lg-8 pe-lg-3 col-12">
+          {% if user.education %}
+            <div class="card border-0 mb-5 d-flex flex-row p-3 align-items-end">
+              <h1 class="my-0">Education</h1>
+              <p class="ms-2 my-0 text-read fs-5">{{ user.education }}</p>
+            </div>
+          {% endif %}
+          <div class="card border-0 p-3 mb-5">
+            <h1>About me</h1>
+            <p class="text-read fs-5">{{ user.about_me|default:"hmm... there's no information"|safe }}</p>
+            {% if user.resume %}
+              <span class="d-flex align-items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-text" viewBox="0 0 16 16">
+                  <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                  <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+                <a href="{{ MEDIA_URL }}{{ user.resume.url }}" download class="text-decoration-none">Curriculum vitae</a>
+              </span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-lg-4 ps-lg-3 col-12">
+          {% if user.github or user.email or user.contact_data %}
+            <div class="card border-0 mb-5 p-3 gap-2 d-flex flex-column">
+              <h1>My contacts <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+                  <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+                </svg>
+              </h1>
+              {% if user.github %}
+                <span class="d-flex align-items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                  </svg>
+                  <a href="{{ user.github }}" class="text-decoration-none">Github</a>
+                </span>
+              {% endif %}
+              {% if user.email %}
+                <span class="d-flex align-items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+                  </svg>
+                  <a class="text-decoration-none">{{ user.email }}</a>
+                </span>
+              {% endif %}
+              {% if user.contact_data %}
+                <div class="mt-2">
+                  <h4>Other contact information</h4>
+                  <p class="my-0 text-read fs-6">{{ user.contact_data }}</p>
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+          {% if user.technologies.exists %}
+            <div class="card border-0 mb-5 p-3 gap-2 d-flex flex-column>">
+              <h1>My stack <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-stack" viewBox="0 0 16 16">
+                <path d="m14.12 10.163 1.715.858c.22.11.22.424 0 .534L8.267 15.34a.598.598 0 0 1-.534 0L.165 11.555a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.66zM7.733.063a.598.598 0 0 1 .534 0l7.568 3.784a.3.3 0 0 1 0 .535L8.267 8.165a.598.598 0 0 1-.534 0L.165 4.382a.299.299 0 0 1 0-.535L7.733.063z"/>
+                <path d="m14.12 6.576 1.715.858c.22.11.22.424 0 .534l-7.568 3.784a.598.598 0 0 1-.534 0L.165 7.968a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.659z"/>
+              </svg>
+              </h1>
+              <ul class="text-read list-unstyled fs-5">
+                {% for tech in user.technologies.all %}
+                  <li>{{ tech.technology }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+          {% if user.languages.exists %}
+            <div class="card border-0 mb-5 p-3 gap-2 d-flex flex-column>">
+              <h1>My languages <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-translate" viewBox="0 0 16 16">
+                  <path d="M4.545 6.714 4.11 8H3l1.862-5h1.284L8 8H6.833l-.435-1.286H4.545zm1.634-.736L5.5 3.956h-.049l-.679 2.022H6.18z"/>
+                  <path d="M0 2a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-3H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2zm7.138 9.995c.193.301.402.583.63.846-.748.575-1.673 1.001-2.768 1.292.178.217.451.635.555.867 1.125-.359 2.08-.844 2.886-1.494.777.665 1.739 1.165 2.93 1.472.133-.254.414-.673.629-.89-1.125-.253-2.057-.694-2.82-1.284.681-.747 1.222-1.651 1.621-2.757H14V8h-3v1.047h.765c-.318.844-.74 1.546-1.272 2.13a6.066 6.066 0 0 1-.415-.492 1.988 1.988 0 0 1-.94.31z"/>
+                </svg>
+              </h1>
+              <ul class="text-read list-unstyled fs-5">
+                {% for lang in user.languages.all %}
+                  <li>{{ lang.language }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

@@ -1,0 +1,8 @@
+{% block content %}
+  <div class="my-auto d-flex flex-column align-items-center">
+    <h2 class="text-center">
+      {{ text }}
+    </h2>
+    <a href="{% url 'home:landing' %}" class="btn btn-primary">Back to main</a>
+  </div>
+{% endblock content %}

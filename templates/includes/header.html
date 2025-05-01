@@ -1,0 +1,83 @@
+{% load thumbnail %}
+<header class="header flex-wrap d-flex container-fluid position-lg-absolute">
+  <nav class="navbar navbar-expand-md d-flex justify-content-between align-items-center w-100">
+    <a href="{% url 'home:landing' %}"
+       class="header__logo text-decoration-none navbar-brand">
+      <span>FLEXWIRE</span>
+    </a>
+    <button class="navbar-toggler ms-auto"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav mx-md-auto ms-sm-auto gap-4">
+        <li class="nav-item">
+          {% url 'teams:teams_list' as team_list %}
+          <a class="header__link h3 {% if request.path == team_list %}active{% endif %}"
+             href="{{ team_list }}">Team search</a>
+        </li>
+        <li class="nav-item">
+          {% url 'teams:user_teams' as user_teams %}
+          <a class="header__link h3 {% if request.path == user_teams %}active{% endif %}"
+             href="{{ user_teams }}">My teams</a>
+        </li>
+      </ul>
+      <div class="ms-lg-auto ms-sm-2 navbar-btn lift text-decoration-none">
+        <span class="d-flex align-items-center h-100">
+          {% if request.user.is_authenticated %}
+            <div class="dropdown d-none d-lg-block d-md-block">
+              <div class="d-flex align-items-center dropdown-toggle"
+                 data-bs-toggle="dropdown" aria-expanded="false">
+                {% thumbnail request.user.image "32x32" crop="center" as img %}
+                  <img src="{{ img.url }}"
+                       width="32px"
+                       height="32px"
+                       class="rounded-circle"
+                       alt="user image"/>
+                {% empty %}
+                  <span class="text-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                      <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                    </svg>
+                  </span>
+                {% endthumbnail %}
+                <p class="my-0 ms-1 profile__link">{{ request.user.nickname }}</p>
+              </div>
+              <ul class="dropdown-menu dropdown-menu-end">
+                {% url 'users:profile' request.user.id as profile %}
+                {% url 'users:account' as account %}
+                <li><a href="{{ profile }}"
+                       class="dropdown-item {% if request.path == profile %}active{% endif %}">Profile</a></li>
+                <li><a href="{{ account }}"
+                       class="dropdown-item {% if request.path == account %}active{% endif %}">Account</a></li>
+                <li><hr class="dropdown-divider"/></li>
+                <li><a href="{% url 'users:logout' %}" class="dropdown-item">Logout</a></li>
+              </ul>
+            </div>
+            <div class="d-lg-none d-md-none d-flex flex-column">
+              <a href="{% url 'users:profile' request.user.id %}"
+                 class="header__link {% if view_name == 'users:profile' %}active{% endif %}">Profile</a>
+              <a href="{% url 'users:account' %}"
+                 class="header__link {% if view_name == 'users:account' %}active{% endif %}">Account</a>
+              <hr class="m-0"/>
+              <a href="{% url 'users:logout' %}"
+                 class="header__link">Logout</a>
+            </div>
+          {% else %}
+            <div class="d-flex gap-2">
+              <a href="{% url 'users:login' %}" class="btn btn-primary px-3">Login</a>
+              <a href="{% url 'users:signup' %}"
+                 class="btn btn-outline-primary px-3">Signup</a>
+            </div>
+          {% endif %}
+        </span>
+      </div>
+    </div>
+  </nav>
+</header>

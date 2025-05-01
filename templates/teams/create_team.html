@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+  Create team
+{% endblock title %}
+
+{% block head %}
+  {{ form.media.css }}
+{% endblock head %}
+
+{% block content %}
+  <div class="my-auto d-flex flex-column">
+    <h1 class="text-center">Create team</h1>
+    <div class="col-lg-6 m-auto card p-3 border-0">
+      <form action="" enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        {% include "includes/form.html" %}
+      </form>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block scripts %}
+  <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
+  {{ form.media.js }}
+{% endblock scripts %}

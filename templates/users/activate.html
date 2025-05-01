@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+  Activating account
+{% endblock title %}
+
+{% block content %}
+  <div class="container my-auto p-0 d-flex flex-column align-items-center">
+  <h4 class="text-center">Activating account</h4>
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <h5 {% if message.tags %} class="{{ message.tags }} text-center"{% endif %}>{{ message }}</h5>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <a href="{% url 'home:landing' %}" class="btn btn-primary">Back to main</a>
+  </div>
+{% endblock content %}

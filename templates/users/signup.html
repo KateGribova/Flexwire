@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Sign up
+{% endblock title %}
+
+{% block content %}
+  {% with text="Please sign up" %}
+    {% with form=form %}
+      {% include "users/includes/form.html" %}
+    {% endwith %}
+  {% endwith %}
+{% endblock content %}

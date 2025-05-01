@@ -1,0 +1,12 @@
+djlint==1.19.16
+flake8==6.0.0
+flake8-quotes==3.3.2
+flake8-variables-names==0.0.5
+freezegun==1.2.2
+isort==5.12.0
+mccabe==0.7.0
+mock==5.0.1
+pep8-naming==0.13.3
+parameterized==0.8.1
+pycodestyle==2.10.0
+pyflakes==3.0.1

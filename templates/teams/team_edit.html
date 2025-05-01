@@ -1,0 +1,80 @@
+{% extends "teams/team.html" %}
+
+{% load thumbnail %}
+{% load static %}
+
+{% block title %}
+  {{ team.title }}
+{% endblock title %}
+
+{% block head %}
+  {{ form.media.css }}
+{% endblock head %}
+
+{% block inner %}
+  <div class="card border-0 rounded p-3 shadow-sm col-lg-6 mx-auto">
+    <form action="" method="post" enctype="multipart/form-data" class="mb-3">
+      {% csrf_token %}
+      {% with form=form %}
+        {% include "includes/form.html" %}
+      {% endwith %}
+    </form>
+    <hr/>
+    <h4>Members <span class="badge rounded-circle text-bg-danger">{{ members.all.count }}</span></h4>
+    <div>
+      <ul class="list-group list-group-flush">
+        {% for member in members %}
+          <li class="list-group-item">
+            <a href="{% url 'users:profile' member.user_id %}" class="text-decoration-none text-dark d-flex justify-content-between align-items-center">
+              {% thumbnail member.user.image "256x256" crop="center" as img %}
+                <img src="{{ img.url }}"
+                     width="72px"
+                     height="72px"
+                     class="rounded-circle"
+                     alt="team image"/>
+              {% empty %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" fill="currentColor" class="bi bi-person-circle text-secondary" viewBox="0 0 16 16">
+                  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                </svg>
+              {% endthumbnail %}
+              <p class="fw-bold m-0">{{ member.user.nickname }}</p>
+              <p class="m-0">{{ member.role_team.role_default.name }}</p>
+              <div class="d-flex gap-2">
+                <form action="{% url 'teams:remove_member' member.id %}" method="post" class="d-flex justify-content-between">
+                  {% csrf_token %}
+                  <input class="btn btn-danger" type="submit" value="Remove"/>
+                </form>
+              </div>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <hr/>
+    <h4>Free roles <span class="badge rounded-circle text-bg-danger">{{ roleteams.all.count }}</span></h4>
+    <div>
+      <ul class="list-group list-group-flush">
+        {% for roleteam in roleteams %}
+          <li class="list-group-item">
+            <div class="d-flex justify-content-between align-items-center">
+              <p class="fw-bold m-0">{{ roleteam.role_default }}</p>
+              <div class="d-flex gap-2">
+                <form action="{% url 'teams:remove_roleteam' roleteam.id %}" method="post" class="d-flex justify-content-between">
+                  {% csrf_token %}
+                  <input class="btn btn-danger" type="submit" value="Remove"/>
+                </form>
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+      <a href="{% url 'teams:create_roleteam' team.id %}" class="btn btn-primary" target="_blank">Create role for team</a>
+    </div>
+  </div>
+{% endblock inner %}
+
+{% block scripts %}
+  <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
+  {{ form.media.js }}
+{% endblock scripts %}
